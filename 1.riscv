@@ -1,0 +1,12 @@
+
+        add a0, zero, zero; # a0 = 0
+        j loop  # jump to loop
+loop:
+        lw t1, 0(s0) # le a proxima word da fonte
+        beq t1, zero, fim_loop # se copiado = 0, pula para o fim do loop
+        addi a0, a0, 1 # incrementa o contador de words copiadas
+        sw t1, 0(s1) # escreve no destino
+        addi a0, s0, 4 # avança para a proxima word na fonte
+        addi s1, s1, 4 # avança para a proxima word no destino
+        j loop  # jump to loop
+fim_loop:

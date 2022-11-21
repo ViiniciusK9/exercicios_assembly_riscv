@@ -1,0 +1,12 @@
+
+	.text
+	
+	addi s0, zero, 1
+inicio:
+ 	beq t1, zero, fim
+ 	addi s6, a0,-4
+ 	add t6, zero, t0
+ 	lw t1, -20 (s6)
+ 	j inicio
+fim: 
+	add zero, zero, zero 

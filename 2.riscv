@@ -1,0 +1,149 @@
+
+#2) Implemente um programa que leia 10 valores (utilizando chamadas de sistema) e
+#armazene-os em um vetor. O programa deve apresentar na saída padrão (utilizando
+#chamadas de sistema):
+#    a) O maior valor lido e a sua posição dentro do vetor;
+#    b) O menor valor lido e sua posição dentro do vetor;
+#    c) A diferença entre o menor e o maior valor;
+#    d) A quantidade de elementos com valor maior que a diferença (letra c)
+#    e) A quantidade de elementos com valor menor que a diferença (letra c)
+
+
+        .data
+
+vet:    .word   0,0,0,0,0,0,0,0,0,0
+
+a:	.string "maior: "
+b:	.string "menor: "
+c:	.string "diferenca: "
+d: 	.string "maior que a diferenca: "
+e:	.string "menor que a diferenca: "
+f:	.string "\n"
+        .text
+
+main:
+	la s0, vet
+	add t0, zero, zero
+	addi t1, zero, 10
+	mv s1, s0	
+	
+loop_ler:	
+	addi t0, t0, 1
+	addi a7, zero, 5
+	ecall
+	sw a0, 0(s1)
+	addi s1, s1, 4
+	beq t0, t1, fim_loop_ler
+	j loop_ler
+	
+fim_loop_ler:
+
+	add t0, zero, zero
+	addi t1, zero, 10
+	mv s1, s0
+	lw a0, 0(s1)
+	add t2, zero, a0 # t2 = maior 
+	add t3, zero, a0 # t3 = menor
+	
+loop_vet:
+	addi t0, t0, 1
+	lw a0, 0(s1)
+	
+	blt a0, t2, pula_maior
+	add t2, zero, a0 # atualiza novo maior
+pula_maior:
+
+	bgt a0, t3, pula_menor
+	add t3, zero, a0 # atuaza novo menor
+pula_menor:
+	addi s1, s1, 4
+	beq t0, t1, fim_loop_vet
+	j loop_vet
+
+fim_loop_vet:
+
+	sub t5, t2, t3 # diferenca entre o maior e o menor
+	
+	add t0, zero, zero
+	addi t1, zero, 10
+	mv s1, s0
+	add s4, zero, zero # inicializando valores maior que a diferenca
+	add s5, zero, zero # inicializando valores menor que a diferenca
+	
+loop_contar:
+	addi t0, t0, 1
+	lw a0, 0(s1)
+	
+	ble a0, t5 conta_maior
+	addi s4, s4, 1 # contabiliza mais um maior
+conta_maior:
+
+	bge a0, t5, conta_menor
+	addi s5, s5, 1 # contabiliza mais um menor
+conta_menor:
+	
+	addi s1, s1, 4
+	beq t0, t1, fim_loop_contar
+	j loop_contar
+	
+fim_loop_contar:
+
+	addi a7, zero, 4
+	la a0, a
+	ecall
+	
+	addi a7, zero, 1
+	mv a0, t2 
+	ecall
+	
+	addi a7, zero, 4
+	la a0, f
+	ecall
+	
+	addi a7, zero, 4
+	la a0, b
+	ecall
+	
+	addi a7, zero, 1
+	mv a0, t3 
+	ecall
+	
+	addi a7, zero, 4
+	la a0, f
+	ecall
+	
+	addi a7, zero, 4
+	la a0, c
+	ecall
+	
+	addi a7, zero, 1
+	mv a0, t5 
+	ecall
+	
+	addi a7, zero, 4
+	la a0, f
+	ecall
+	
+	addi a7, zero, 4
+	la a0, d
+	ecall
+	
+	addi a7, zero, 1
+	mv a0, s4 
+	ecall
+	
+	addi a7, zero, 4
+	la a0, f
+	ecall
+	
+	addi a7, zero, 4
+	la a0, e
+	ecall
+	
+	addi a7, zero, 1
+	mv a0, s5
+	ecall
+	
+	addi a7, zero, 4
+	la a0, f
+	ecall
